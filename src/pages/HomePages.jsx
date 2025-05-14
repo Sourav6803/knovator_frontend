@@ -11,7 +11,7 @@ const HomePage = () => {
 
   const fetchJobs = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/jobs");
+      const res = await axios.get("https://knovator-backend.onrender.com/api/jobs");
       setJobs(res.data);
     } catch (error) {
       toast.error("Failed to fetch jobs. Please try again.");

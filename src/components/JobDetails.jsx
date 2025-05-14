@@ -13,7 +13,7 @@ const JobDetails = () => {
 
   const fetchJobDetails = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/jobs/${id}`);
+      const res = await axios.get(`https://knovator-backend.onrender.com/api/jobs/${id}`);
       setJob(res.data);
     } catch (err) {
       toast.error("Failed to fetch job details.");

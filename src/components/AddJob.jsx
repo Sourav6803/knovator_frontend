@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   title: "",
@@ -16,6 +17,8 @@ const AddJob = () => {
   const [errors, setErrors] = useState({});
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const validate = () => {
     const newErrors = {};
@@ -44,6 +47,32 @@ const AddJob = () => {
     }
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!validate()) return;
+
+  //   try {
+  //     setLoading(true);
+
+  //     const jobData = {
+  //       ...formData,
+  //       image:
+  //         formData.image || "https://via.placeholder.com/80x80.png?text=Logo", // fallback
+  //     };
+
+  //        const config = { headers: { "Content-Type": "multipart/form-data" } }
+
+  //     await axios.post("http://localhost:8000/api/jobs/createJob", jobData, config);
+  //     toast.success("Job posted successfully!");
+  //     setFormData(initialState);
+  //     setImageFile(null);
+  //   } catch (err) {
+  //     toast.error("Failed to post the job.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -51,18 +80,35 @@ const AddJob = () => {
     try {
       setLoading(true);
 
-      const jobData = {
-        ...formData,
-        image:
-          formData.image || "https://via.placeholder.com/80x80.png?text=Logo", // fallback
-      };
+      const data = new FormData();
+      data.append("title", formData.title);
+      data.append("company", formData.company);
+      data.append("type", formData.type);
+      data.append("location", formData.location);
+      data.append("description", formData.description);
+      data.append("image", imageFile); // send file
 
-      await axios.post("http://localhost:8000/api/jobs/createJob", jobData);
-      toast.success("Job posted successfully!");
+      const res = await axios.post(
+        "https://knovator-backend.onrender.com/api/jobs/createJob",
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (res) {
+        toast.success("Job posted successfully!");
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      }
       setFormData(initialState);
       setImageFile(null);
     } catch (err) {
       toast.error("Failed to post the job.");
+      console.error("Job creation failed:", err);
     } finally {
       setLoading(false);
     }
