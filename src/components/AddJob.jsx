@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { SERVER } from "../server";
+
 
 const initialState = {
   title: "",
@@ -19,6 +21,7 @@ const AddJob = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  
 
   const validate = () => {
     const newErrors = {};
@@ -47,31 +50,6 @@ const AddJob = () => {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (!validate()) return;
-
-  //   try {
-  //     setLoading(true);
-
-  //     const jobData = {
-  //       ...formData,
-  //       image:
-  //         formData.image || "https://via.placeholder.com/80x80.png?text=Logo", // fallback
-  //     };
-
-  //        const config = { headers: { "Content-Type": "multipart/form-data" } }
-
-  //     await axios.post("http://localhost:8000/api/jobs/createJob", jobData, config);
-  //     toast.success("Job posted successfully!");
-  //     setFormData(initialState);
-  //     setImageFile(null);
-  //   } catch (err) {
-  //     toast.error("Failed to post the job.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,7 +67,7 @@ const AddJob = () => {
       data.append("image", imageFile); // send file
 
       const res = await axios.post(
-        "https://knovator-backend.onrender.com/api/jobs/createJob",
+        `${SERVER}/api/jobs/createJob`,
         data,
         {
           headers: {

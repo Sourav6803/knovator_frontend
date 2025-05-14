@@ -4,16 +4,18 @@ import axios from "axios";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 import { ArrowLeft, Briefcase, MapPin, Calendar } from "lucide-react";
+import { SERVER } from "../server";
 
 const JobDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
+  
 
   const fetchJobDetails = async () => {
     try {
-      const res = await axios.get(`https://knovator-backend.onrender.com/api/jobs/${id}`);
+      const res = await axios.get(`${SERVER}/api/jobs/${id}`);
       setJob(res.data);
     } catch (err) {
       toast.error("Failed to fetch job details.");
